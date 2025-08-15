@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div class="container" >
@@ -156,6 +159,25 @@
                 });   
         </script>
 
+        <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+ <!------>>
+
+<script>
+  document.getElementById("download").addEventListener("click", function () {
+    const target = document.querySelector(".rect-default"); // Asegúrate que esta clase esté en tu tarjeta
+
+    html2canvas(target, {
+      scale: 2, // Mejora la calidad
+      useCORS: true // Si usas imágenes externas
+    }).then(canvas => {
+      const link = document.createElement("a");
+      link.download = "tarjeta-letra.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
+  });
+</script>
 
         <script>
            
