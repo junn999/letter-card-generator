@@ -10,11 +10,14 @@ h2 {
 }
 .rect-default {
   background-color: #282828;
-  padding: 30px;
+  height: 500px;     /* alto fijo */
+  padding: 20px;
   border-radius: 20px;
-  width: 500px;
+  width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
   transition: background 0.3s ease;
+  overflow: hidden;
+  position: relative;
 }
 
 .songs-info {
@@ -38,9 +41,15 @@ h2 {
   color: #fff;
 }
 
+#text-lyric:empty::before {
+  content: attr(data-placeholder);
+  color: #777;
+}
+
 #text-name {
   font-size: 24px;
   font-weight: bold;
+  color: #ccc;
   outline: none;
 }
 
@@ -91,20 +100,7 @@ input[type="file"] {
 }
 
 /* Botón */
-.btn {
-  background-color: #1DB954;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
 
-.btn:hover {
-  background-color: #17a44a;
-}
 
 /* From Uiverse.io by satyamchaudharydev */ 
 .button {
@@ -242,4 +238,44 @@ input[type="file"] {
   100% {
     transform: rotate(0deg);
   }
+}
+
+/* Estilo de placeholder general para contenteditable */
+[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: #777; /* gris clarito */
+  pointer-events: none; /* no bloquea clics */
+}
+
+/* Personalizamos si queremos */
+#text-name:empty::before {
+  font-size: 24px;
+  font-weight: bold;
+  color: #aaa;
+}
+
+#text-author:empty::before {
+  font-size: 16px;
+  font-style: italic;
+  color: #bbb;
+}
+
+#text-lyric:empty::before {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #888;
+  white-space: pre-line; /* soporta saltos de línea si quieres */
+}
+
+#char-count {
+  font-size: 12px;
+  color: white;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+  pointer-events: none;
+}
+
+.card-wrapper {
+  position: relative; /* importante para que el contador se posicione dentro */
 }

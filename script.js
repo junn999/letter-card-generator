@@ -52,11 +52,50 @@ function loadFile(event) {
   image.hidden = false;
 }
 window.loadFile = loadFile; // si usas onchange="loadFile(event)" en HTML
+//--------------------------------------------------------
+const lyric = document.getElementById("text-lyric");
+const counter = document.getElementById("char-count");
+const MAX_CHARS = 600;
+
+// Actualiza contador y limita caracteres
+lyric.addEventListener("input", function () {
+  let text = lyric.innerText;
+
+  if (text.length > MAX_CHARS) {
+    lyric.innerText = text.substring(0, MAX_CHARS);
+    placeCaretAtEnd(lyric);
+  }
+
+  counter.textContent = lyric.innerText.length + " / " + MAX_CHARS;
+});
+
+// Bloquear teclas si se pasa del límite
+lyric.addEventListener("keydown", function (e) {
+  let text = lyric.innerText;
+  if (text.length >= MAX_CHARS &&
+      e.key.length === 1 && // evita bloquear Enter, Backspace, etc
+      !e.ctrlKey && !e.metaKey) {
+    e.preventDefault();
+  }
+});
+
+function placeCaretAtEnd(el) {
+  el.focus();
+  if (typeof window.getSelection != "undefined"
+      && typeof document.createRange != "undefined") {
+    let range = document.createRange();
+    range.selectNodeContents(el);
+    range.collapse(false);
+    let sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+}
 
 // ------------------ Exportar como imagen ------------------
 document.getElementById("download").addEventListener("click", function () {
   const target = document.querySelector(".rect-default"); // asegúrate que esta clase esté aplicada correctamente
-
+  counter.style.display = "none";
   html2canvas(target, {
     scale: 3,
     backgroundColor: null,
@@ -66,6 +105,7 @@ document.getElementById("download").addEventListener("click", function () {
       const h1content = document.getElementById("text-name").innerHTML;
       const filename = h1content.replace(/(<([^>]+)>)/ig, "") + ".png";
       window.saveAs(blob, filename);
+       counter.style.display = "block";
     });
   });
 });
@@ -79,20 +119,23 @@ document.getElementById("border").addEventListener("input", function () {
 // Limpia el texto al hacer clic si es igual al placeholder
 ["text-name", "text-author", "text-lyric"].forEach(id => {
   const el = document.getElementById(id);
+  const placeholder = el.dataset.placeholder;
 
-  // Al hacer click, si el texto coincide con el placeholder => limpiar
+  // Cuando enfoca
   el.addEventListener("focus", function () {
-    if (el.innerText.trim() === el.dataset.placeholder) {
+    if (el.innerText.trim() === placeholder) {
       el.innerText = "";
     }
   });
 
-  // Si se queda vacío, restaurar placeholder
+  // Cuando pierde el foco
   el.addEventListener("blur", function () {
     if (el.innerText.trim() === "") {
-      el.innerText = el.dataset.placeholder;
+      el.innerText = placeholder;
     }
   });
 });
+
+
 
 
